@@ -3,18 +3,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.netcracker.iphs</groupId>
-    <artifactId>netcracker.iphs</artifactId>
+    <groupId>com.mipt.file-encryptor</groupId>
+    <artifactId>com.mipt.file-encryptor</artifactId>
     <version>next-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>demo</name>
+    <name>file-encryptor</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.3.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>1.5.8.RELEASE</version>
     </parent>
 
     <properties>
@@ -30,6 +29,10 @@
             <artifactId>lombok</artifactId>
             <version>1.16.16</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -68,13 +71,6 @@
             <version>1.13.1</version>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>javax.json</artifactId>
-            <version>1.0.4</version>
-        </dependency>
-
         <dependency>
             <groupId>javax.json</groupId>
             <artifactId>javax.json-api</artifactId>
