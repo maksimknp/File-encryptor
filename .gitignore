@@ -1,0 +1,15 @@
+# IDEs and editors
+/.idea
+*.iml
+.classpath
+.settings/
+*halflings*
+*bundle*
+*.log
+/e2e
+
+#System Files
+.DS_Store
+Thumbs.db
+
+target/
