@@ -2,11 +2,11 @@ package com.mipt.app.database.model.user;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mipt.app.database.model.file.File;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +19,6 @@ import java.util.List;
 public class User implements Serializable {
 
     @Id
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -28,10 +27,11 @@ public class User implements Serializable {
     private String username;
 
     @NonNull
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Files> files = new ArrayList<>();
+    private List<File> files = new ArrayList<>();
 
 }

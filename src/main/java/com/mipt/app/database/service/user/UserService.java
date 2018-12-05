@@ -7,4 +7,6 @@ public interface UserService {
     boolean userAuthorization(String username, String password);
 
     User createUser(String username, String password);
+
+    User getUserById(Long userId);
 }

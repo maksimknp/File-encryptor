@@ -26,11 +26,16 @@ public class UserServiceImpl implements UserService {
         String encodePassword = UserServiceUtils.md5Encode(password);
         User createdUser = new User(username, encodePassword);
         if (!userRepository.existsByUsername(username)) {
-            userRepository.save(createdUser);
+            createdUser = userRepository.save(createdUser);
         } else {
             throw new RegisterException(String.format(RegisterException.EXIST_USERNAME, username));
         }
         return createdUser;
+    }
+
+    @Override
+    public User getUserById(Long userId) {
+        return userRepository.findOne(userId);
     }
 
 }

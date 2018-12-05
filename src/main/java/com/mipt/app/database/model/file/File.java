@@ -30,6 +30,7 @@ public class File implements Serializable {
     private FileStatus status;
 
     @NonNull
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
