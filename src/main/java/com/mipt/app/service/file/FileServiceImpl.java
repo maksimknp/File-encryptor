@@ -1,5 +1,6 @@
-package com.mipt.app.database.service.file;
+package com.mipt.app.service.file;
 
+import com.mipt.app.apllicationUtils.ExecuteCommand;
 import com.mipt.app.database.model.file.File;
 import com.mipt.app.database.model.user.User;
 import com.mipt.app.database.repositories.file.FileRepository;
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FileServiceImpl implements FileService {
+
+    private final String ENCRYPT_FILE = "./crypto --key %s --file %s --encrypt";
+    private final String DECRYPT_FILE = "./crypto --key %s --file %s --decrypt";
 
     @Autowired
     private FileRepository fileRepository;
@@ -52,6 +56,7 @@ public class FileServiceImpl implements FileService {
         }
 
         //encryptFile
+        ExecuteCommand.executeCommand(String.format(ENCRYPT_FILE, getKey(needFile), filePath));
 
         return fileRepository.save(changeStatusById(needFile));
     }
@@ -66,9 +71,13 @@ public class FileServiceImpl implements FileService {
         }
 
         //decryptFile
+        ExecuteCommand.executeCommand(String.format(DECRYPT_FILE, getKey(needFile), filePath));
 
         return fileRepository.save(changeStatusById(needFile));
     }
 
+    private String getKey(File file){
+        return file.getUser().getPassword();
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.mipt.app.database.service.user;
+package com.mipt.app.service.user;
 
 import com.mipt.app.database.model.user.User;
 

@@ -2,8 +2,8 @@ package com.mipt.app.controller;
 
 import com.mipt.app.database.model.file.File;
 import com.mipt.app.database.model.user.User;
-import com.mipt.app.database.service.file.FileService;
-import com.mipt.app.database.service.user.UserService;
+import com.mipt.app.service.file.FileService;
+import com.mipt.app.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

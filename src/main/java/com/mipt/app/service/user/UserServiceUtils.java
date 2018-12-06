@@ -1,4 +1,4 @@
-package com.mipt.app.database.service.user;
+package com.mipt.app.service.user;
 
 import org.apache.commons.codec.digest.DigestUtils;
 

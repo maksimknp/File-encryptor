@@ -1,4 +1,4 @@
-package com.mipt.app.database.service.file;
+package com.mipt.app.service.file;
 
 import com.mipt.app.database.model.file.File;
 
