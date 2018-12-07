@@ -1,11 +1,14 @@
 package com.mipt.app.service.user;
 
+import com.mipt.app.database.model.file.File;
 import com.mipt.app.database.model.user.User;
 import com.mipt.app.database.repositories.user.UserRepository;
 import com.mipt.app.exception.RegisterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -40,6 +43,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Long userId) {
         return userRepository.findOne(userId);
+    }
+
+    @Override
+    public List<File> getAllFilesByUserId(Long userId) {
+        return userRepository.findOne(userId).getFiles();
     }
 
 }

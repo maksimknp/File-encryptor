@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/enc")
@@ -20,7 +22,6 @@ public class RestValueController {
   @Autowired
   private FileService fileService;
 
-  //TODO: return user
   @PostMapping("/user/login")
   @ResponseStatus(HttpStatus.ACCEPTED)
   public User authorization(@RequestParam(value = "username") String username,
@@ -60,5 +61,9 @@ public class RestValueController {
     return fileService.decryptfile(id);
   }
 
-  //TODO: endpoint get all files  by userId
+  @GetMapping("/user/files")
+  @ResponseStatus(HttpStatus.FOUND)
+  public List<File> getAllFilesByUserId(@RequestParam(value = "userId") Long userId){
+    return userService.getAllFilesByUserId(userId);
+  }
 }
