@@ -35,7 +35,7 @@ public class FileServiceImpl implements FileService {
     public File addNewFile(String filePath, Long userId) {
         User owner = userRepository.findOne(userId);
 
-        File createdFile = new File(filePath, FileStatus.DECRYPTED, owner);
+        File createdFile = new File(filePath, owner);
         if (!fileRepository.existsByPath(filePath)){
             createdFile = fileRepository.save(createdFile);
         } else {
