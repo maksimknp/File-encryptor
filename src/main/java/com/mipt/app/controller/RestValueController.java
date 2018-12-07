@@ -62,7 +62,7 @@ public class RestValueController {
   }
 
   @GetMapping("/user/files")
-  @ResponseStatus(HttpStatus.FOUND)
+  @ResponseStatus(HttpStatus.OK)
   public List<File> getAllFilesByUserId(@RequestParam(value = "userId") Long userId){
     return userService.getAllFilesByUserId(userId);
   }
