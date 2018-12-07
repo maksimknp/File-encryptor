@@ -4,7 +4,7 @@ import com.mipt.app.database.model.user.User;
 
 public interface UserService {
 
-    boolean userAuthorization(String username, String password);
+    User userAuthorization(String username, String password);
 
     User createUser(String username, String password);
 

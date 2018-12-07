@@ -77,7 +77,7 @@ public class FileServiceImpl implements FileService {
     }
 
     private String getKey(File file){
-        return file.getUser().getPassword();
+        return file.getUser().getPassword().substring(0, 32);
     }
 
 }

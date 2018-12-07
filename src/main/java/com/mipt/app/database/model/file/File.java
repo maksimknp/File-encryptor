@@ -17,7 +17,6 @@ import java.io.Serializable;
 public class File implements Serializable {
 
     @Id
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

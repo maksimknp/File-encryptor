@@ -14,11 +14,15 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public boolean userAuthorization(String username, String password) {
+    public User userAuthorization(String username, String password) {
         User user = userRepository.getUserByUsername(username).orElseThrow(
                 () -> new ResourceNotFoundException("User not found with username: " + username, null));
         String encodePassword = UserServiceUtils.md5Encode(password);
-        return encodePassword.equals(user.getPassword());
+        if (encodePassword.equals(user.getPassword())){
+            return user;
+        } else {
+            throw new RuntimeException(String.format("Wrong password"));
+        }
     }
 
     @Override

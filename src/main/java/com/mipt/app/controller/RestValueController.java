@@ -20,9 +20,10 @@ public class RestValueController {
   @Autowired
   private FileService fileService;
 
+  //TODO: return user
   @PostMapping("/user/login")
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public boolean authorization(@RequestParam(value = "username") String username,
+  public User authorization(@RequestParam(value = "username") String username,
                                @RequestParam(value = "password") String password){
     return userService.userAuthorization(username, password);
   }
@@ -58,4 +59,6 @@ public class RestValueController {
   public File decryptFile(@RequestParam(value = "fileId") Long id){
     return fileService.decryptfile(id);
   }
+
+  //TODO: endpoint get all files  by userId
 }
