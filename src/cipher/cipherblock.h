@@ -7,20 +7,24 @@
 class CipherBlockEncryptor final {
 
 public:
-    CipherBlockEncryptor(char* Key): encryptor(Key)
+    CipherBlockEncryptor(const char* keyPath): K(GetKey(keyPath)), encryptor(K)
     {}
-
+    ~CipherBlockEncryptor()
+    {
+        delete[] K;
+    }
     CipherBlockEncryptor(const CipherBlockEncryptor& that) = delete;
     CipherBlockEncryptor(CipherBlockEncryptor&& that) = delete;
 
-    void EncryptFile(std::fstream& file) const;
+    void EncryptFile(const char* fileName) const;
 
-    void DecryptFile(std::fstream& file) const;
-
-private:
-    void GenerateVector(/*TODO ARGS*/) const;
+    void DecryptFile(const char* fileName) const;
 
 private:
+    void GenerateVector(uint64_t count) const;
+    char* GetKey(const char* keyPath);
+private:
+    char* K;
     BlowFish encryptor;
     mutable uint64_t xorVector[2];
 };

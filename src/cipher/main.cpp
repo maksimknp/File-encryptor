@@ -5,18 +5,15 @@ int main(int argc, char* argv[])
 {
     options::ParseOptions(argc, argv);
     
-    std::fstream file;
-    file.open(options::file, std::fstream::binary | std::fstream::in | std::fstream::out);
-    
-    CipherBlockEncryptor encryptor(options::key);
+    CipherBlockEncryptor encryptor(options::keyPath);
 
     if (options::encrypt)
     {
-        encryptor.EncryptFile(file);
+        encryptor.EncryptFile(options::file);
     }
     if (options::decrypt)
     {
-        encryptor.DecryptFile(file);
+        encryptor.DecryptFile(options::file);
     }
 
     return 0;
