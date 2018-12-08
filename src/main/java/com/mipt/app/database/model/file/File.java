@@ -27,6 +27,10 @@ public class File implements Serializable {
     private String path;
 
     @NonNull
+    @Column(name = "keyPath")
+    private String keyPath;
+
+    @NonNull
     @Column(name = "status")
     private FileStatus status;
 
@@ -36,9 +40,10 @@ public class File implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public File(String path, User user) {
+    public File(String path, User user, String keyPath) {
         this.path = path;
         this.user = user;
+        this.keyPath = keyPath;
         this.status = FileStatus.DECRYPTED;
         initialFileName(path);
     }

@@ -7,14 +7,19 @@ import com.mipt.app.database.repositories.file.FileRepository;
 import com.mipt.app.database.repositories.user.UserRepository;
 import com.mipt.app.enums.FileStatus;
 import com.mipt.app.exception.SaveException;
+import com.mipt.app.service.user.UserServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Date;
 
 @Service
 public class FileServiceImpl implements FileService {
 
-    private final String ENCRYPT_FILE = "./crypto --key %s --file %s --encrypt";
-    private final String DECRYPT_FILE = "./crypto --key %s --file %s --decrypt";
+    private final String ENCRYPT_FILE = "./crypto --encrypt --key-path %s --file %s";
+    private final String DECRYPT_FILE = "./crypto --decrypt --key-path %s --file %s";
 
     @Autowired
     private FileRepository fileRepository;
@@ -32,12 +37,16 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public File addNewFile(String filePath, Long userId) {
+    public File addNewFile(String filePath, Long userId, String keyPath) {
+        FileServiceUtils.checkFilePath(filePath);
+        FileServiceUtils.checkFilePath(keyPath);
+
         User owner = userRepository.findOne(userId);
 
-        File createdFile = new File(filePath, owner);
-        if (!fileRepository.existsByPath(filePath)){
+        File createdFile = new File(filePath, owner, keyPath);
+        if (!fileRepository.existsByPathAndUser(filePath, owner)){
             createdFile = fileRepository.save(createdFile);
+            writeInFileUserKey(createdFile.getName() + owner.getPassword(), keyPath);
         } else {
             throw new SaveException(String.format(SaveException.FILE_SAVE_EXCEPTION, filePath));
         }
@@ -56,7 +65,9 @@ public class FileServiceImpl implements FileService {
         }
 
         //encryptFile
-        ExecuteCommand.executeCommand(String.format(ENCRYPT_FILE, getKey(needFile), filePath));
+        System.out.println(new Date());
+        ExecuteCommand.executeCommand(String.format(ENCRYPT_FILE, needFile.getKeyPath(), filePath));
+        System.out.println(new Date());
 
         return fileRepository.save(changeStatusById(needFile));
     }
@@ -71,13 +82,21 @@ public class FileServiceImpl implements FileService {
         }
 
         //decryptFile
-        ExecuteCommand.executeCommand(String.format(DECRYPT_FILE, getKey(needFile), filePath));
+        ExecuteCommand.executeCommand(String.format(DECRYPT_FILE, needFile.getKeyPath(), filePath));
 
         return fileRepository.save(changeStatusById(needFile));
     }
 
-    private String getKey(File file){
-        return file.getUser().getPassword().substring(0, 32);
+    private void writeInFileUserKey(String password, String keyPath) {
+        String userKey = UserServiceUtils.md5Encode(password);
+        try(FileWriter writer = new FileWriter(keyPath, true))
+        {
+            writer.write(userKey);
+            writer.flush();
+        }
+        catch(IOException ex){
+            throw new RuntimeException(ex.getMessage());
+        }
     }
 
 }

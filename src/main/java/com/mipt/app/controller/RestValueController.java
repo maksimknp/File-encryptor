@@ -39,8 +39,9 @@ public class RestValueController {
   @PostMapping("/file/save")
   @ResponseStatus(HttpStatus.CREATED)
   public File addFile(@RequestParam(value = "path") String filePath,
+                      @RequestParam(value = "keyPath") String keyPath,
                       @RequestParam(value = "userId") Long userId){
-    return fileService.addNewFile(filePath, userId);
+    return fileService.addNewFile(filePath, userId, keyPath);
   }
 
   @GetMapping("/user")

@@ -12,7 +12,6 @@ import java.util.List;
 
 @Entity
 @Data
-@RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
@@ -31,7 +30,12 @@ public class User implements Serializable {
     @Column(name = "password")
     private String password;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<File> files = new ArrayList<>();
 
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

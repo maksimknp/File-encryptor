@@ -6,7 +6,7 @@ public interface FileService {
 
     File changeStatusById(File file);
 
-    File addNewFile(String filePath, Long userId);
+    File addNewFile(String filePath, Long userId, String keyPath);
 
     File encryptfile(Long id);
 
