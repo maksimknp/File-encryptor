@@ -1,9 +1,11 @@
-package com.mipt.app.database.model.file;
+package com.mipt.app.database.postgresql.model.file;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mipt.app.database.model.user.User;
-import com.mipt.app.enums.FileStatus;
-import lombok.*;
+import com.mipt.app.database.postgresql.model.user.User;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -27,24 +29,14 @@ public class File implements Serializable {
     private String path;
 
     @NonNull
-    @Column(name = "keyPath")
-    private String keyPath;
-
-    @NonNull
-    @Column(name = "status")
-    private FileStatus status;
-
-    @NonNull
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public File(String path, User user, String keyPath) {
+    public File(String path, User user) {
         this.path = path;
         this.user = user;
-        this.keyPath = keyPath;
-        this.status = FileStatus.DECRYPTED;
         initialFileName(path);
     }
 

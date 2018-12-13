@@ -1,12 +1,10 @@
 package com.mipt.app.service.file;
 
-import com.mipt.app.database.model.file.File;
+import com.mipt.app.database.postgresql.model.file.File;
 
 public interface FileService {
 
-    File changeStatusById(File file);
-
-    File addNewFile(String filePath, Long userId, String keyPath);
+    File addNewFile(String filePath, Long userId);
 
     File encryptfile(Long id);
 

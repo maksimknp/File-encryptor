@@ -1,7 +1,7 @@
 package com.mipt.app.controller;
 
-import com.mipt.app.database.model.file.File;
-import com.mipt.app.database.model.user.User;
+import com.mipt.app.database.postgresql.model.file.File;
+import com.mipt.app.database.postgresql.model.user.User;
 import com.mipt.app.service.file.FileService;
 import com.mipt.app.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,55 +16,51 @@ import java.util.List;
 @CrossOrigin
 public class RestValueController {
 
-  @Autowired
-  private UserService userService;
+    @Autowired
+    private UserService userService;
 
-  @Autowired
-  private FileService fileService;
+    @Autowired
+    private FileService fileService;
 
-  @PostMapping("/user/login")
-  @ResponseStatus(HttpStatus.ACCEPTED)
-  public User authorization(@RequestParam(value = "username") String username,
-                               @RequestParam(value = "password") String password){
-    return userService.userAuthorization(username, password);
-  }
+    @PostMapping("/user/login")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public User authorization(@RequestParam(value = "username") String username,
+                              @RequestParam(value = "password") String password,
+                              @RequestParam(value = "flashPath") String flashPath,
+                              @RequestParam(value = "keyPath") String keyPath) {
+        return userService.userAuthorization(username, password, flashPath, keyPath);
+    }
 
-  @PostMapping("/user/reg")
-  @ResponseStatus(HttpStatus.ACCEPTED)
-  public User registration(@RequestParam(value = "username") String username,
-                           @RequestParam(value = "password") String password){
-    return userService.createUser(username, password);
-  }
+    @PostMapping("/user/reg")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public User registration(@RequestParam(value = "username") String username,
+                             @RequestParam(value = "password") String password,
+                             @RequestParam(value = "flashPath") String flashPath,
+                             @RequestParam(value = "keyPath") String keyPath) {
+        return userService.createUser(username, password, flashPath, keyPath);
+    }
 
-  @PostMapping("/file/save")
-  @ResponseStatus(HttpStatus.CREATED)
-  public File addFile(@RequestParam(value = "path") String filePath,
-                      @RequestParam(value = "keyPath") String keyPath,
-                      @RequestParam(value = "userId") Long userId){
-    return fileService.addNewFile(filePath, userId, keyPath);
-  }
+    @GetMapping("/user")
+    @ResponseStatus(HttpStatus.FOUND)
+    public User getUserById(@RequestParam(value = "userId") Long userId) {
+        return userService.getUserById(userId);
+    }
 
-  @GetMapping("/user")
-  @ResponseStatus(HttpStatus.FOUND)
-  public User getUserById(@RequestParam(value = "userId") Long userId){
-    return userService.getUserById(userId);
-  }
+    @PostMapping("file/encrypt")
+    @ResponseStatus(HttpStatus.OK)
+    public File encryptFile(@RequestParam(value = "fileId") Long id) {
+        return fileService.encryptfile(id);
+    }
 
-  @PostMapping("file/encrypt")
-  @ResponseStatus(HttpStatus.OK)
-  public File encryptFile(@RequestParam(value = "fileId") Long id){
-    return fileService.encryptfile(id);
-  }
+    @PostMapping("file/decrypt")
+    @ResponseStatus(HttpStatus.OK)
+    public File decryptFile(@RequestParam(value = "fileId") Long id) {
+        return fileService.decryptfile(id);
+    }
 
-  @PostMapping("file/decrypt")
-  @ResponseStatus(HttpStatus.OK)
-  public File decryptFile(@RequestParam(value = "fileId") Long id){
-    return fileService.decryptfile(id);
-  }
-
-  @GetMapping("/user/files")
-  @ResponseStatus(HttpStatus.OK)
-  public List<File> getAllFilesByUserId(@RequestParam(value = "userId") Long userId){
-    return userService.getAllFilesByUserId(userId);
-  }
+    @GetMapping("/user/files")
+    @ResponseStatus(HttpStatus.OK)
+    public List<File> getAllFilesByUserId(@RequestParam(value = "userId") Long userId) {
+        return userService.getAllFilesByUserId(userId);
+    }
 }

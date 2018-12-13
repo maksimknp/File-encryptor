@@ -1,6 +1,6 @@
-package com.mipt.app.database.repositories.user;
+package com.mipt.app.database.postgresql.repositories.user;
 
-import com.mipt.app.database.model.user.User;
+import com.mipt.app.database.postgresql.model.user.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

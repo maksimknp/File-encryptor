@@ -1,9 +1,10 @@
-package com.mipt.app.database.model.user;
+package com.mipt.app.database.postgresql.model.user;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mipt.app.database.model.file.File;
+import com.mipt.app.database.postgresql.model.file.File;
 import lombok.*;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -30,12 +31,17 @@ public class User implements Serializable {
     @Column(name = "password")
     private String password;
 
-    @JsonIgnore
+    private String keyPath;
+
+    private String drivePath;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<File> files = new ArrayList<>();
 
-    public User(String username, String password) {
+    public User(String username, String password, String drivePath, String keyPath) {
         this.username = username;
         this.password = password;
+        this.drivePath = drivePath;
+        this.keyPath = keyPath;
     }
 }
