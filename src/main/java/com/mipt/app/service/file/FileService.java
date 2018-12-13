@@ -6,7 +6,7 @@ public interface FileService {
 
     File addNewFile(String filePath, Long userId);
 
-    File encryptfile(Long id);
+    File encryptfile(Long userId, String filePath);
 
-    File decryptfile(Long id);
+    boolean decryptfile(Long id);
 }

@@ -48,13 +48,14 @@ public class RestValueController {
 
     @PostMapping("file/encrypt")
     @ResponseStatus(HttpStatus.OK)
-    public File encryptFile(@RequestParam(value = "fileId") Long id) {
-        return fileService.encryptfile(id);
+    public File encryptFile(@RequestParam(value = "userId") Long userId,
+                            @RequestParam(value = "filePath") String filePath) {
+        return fileService.encryptfile(userId, filePath);
     }
 
     @PostMapping("file/decrypt")
     @ResponseStatus(HttpStatus.OK)
-    public File decryptFile(@RequestParam(value = "fileId") Long id) {
+    public Boolean decryptFile(@RequestParam(value = "fileId") Long id) {
         return fileService.decryptfile(id);
     }
 
