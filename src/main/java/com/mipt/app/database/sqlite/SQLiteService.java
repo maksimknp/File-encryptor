@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.sql.*;
 
+import static com.mipt.app.service.file.FileServiceUtils.checkFilePath;
+
 //TODO: think about buffer size and delete directory
 @Service
 public class SQLiteService {
@@ -27,6 +29,7 @@ public class SQLiteService {
         String sql = "CREATE TABLE IF NOT EXISTS files (\n"
                 + "	id integer NOT NULL,\n"
                 + "	path text NOT NULL,\n"
+                + " file_size integer NOT NULL,\n"
                 + "	file blob NOT NULL\n"
                 + ");";
 
@@ -44,13 +47,16 @@ public class SQLiteService {
     public void encryptFile(String dbPath, Long id, String filePath) {
         String url = "jdbc:sqlite:" + dbPath;
 
-        String sql = "INSERT INTO files(id, path, file) VALUES(?,?,?)";
+        String sql = "INSERT INTO files(id, path, file_size, file) VALUES(?,?,?,?)";
+
+        byte[] file = getBytesFromFile(filePath);
 
         try (Connection conn = DriverManager.getConnection(url);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setLong(1, id);
             pstmt.setString(2, filePath);
-            pstmt.setBytes(3, getBytesFromFile(filePath));
+            pstmt.setInt(3, file.length);
+            pstmt.setBytes(4, file);
             pstmt.executeUpdate();
             log.info("File with path {} was encrypted", filePath);
         } catch (SQLException e) {
@@ -82,7 +88,6 @@ public class SQLiteService {
         FileOutputStream fos = null;
         Connection conn = null;
         PreparedStatement pstmt = null;
-        String filePath = null;
 
         try {
             conn = DriverManager.getConnection(url);
@@ -91,14 +96,15 @@ public class SQLiteService {
             rs = pstmt.executeQuery();
 
             // write binary stream into file
-            filePath = rs.getString("path");
+            String filePath = rs.getString("path");
+            checkFilePathForDecrypt(filePath);
             File file = new File(filePath);
             fos = new FileOutputStream(file);
 
             log.info("Writing BLOB to file " + file.getAbsolutePath());
             while (rs.next()) {
                 InputStream input = rs.getBinaryStream("file");
-                byte[] buffer = new byte[1];
+                byte[] buffer = new byte[rs.getInt("file_size")];
                 while (input.read(buffer) > 0) {
                     fos.write(buffer);
                 }
@@ -124,6 +130,30 @@ public class SQLiteService {
             } catch (SQLException | IOException e) {
                 System.out.println(e.getMessage());
             }
+        }
+    }
+
+    private void checkFilePathForDecrypt(String filePath) {
+        log.info(filePath);
+        String[] pathParts = filePath.split("/");
+        String directoryPath = pathParts[0];
+        for (int i = 1; i < pathParts.length -1; i++) {
+            log.info("->" + directoryPath);
+            directoryPath += File.separator + pathParts[i];
+        }
+        log.info("Directory path of file: {}", directoryPath);
+
+        File theDir = new File(directoryPath);
+        if (!theDir.exists()) {
+            log.info("creating directory: " + theDir.getName());
+
+            try{
+                theDir.mkdirs();
+            }
+            catch(SecurityException se){
+                //handle it
+            }
+            log.info("Directory {} was created", directoryPath);
         }
     }
 
