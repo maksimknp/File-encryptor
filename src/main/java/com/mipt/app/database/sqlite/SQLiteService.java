@@ -133,17 +133,15 @@ public class SQLiteService {
         }
     }
 
-    private void checkFilePathForDecrypt(String filePath) {
-        log.info(filePath);
+    public void checkFilePathForDecrypt(String filePath) {
         String[] pathParts = filePath.split("/");
-        String directoryPath = pathParts[0];
+        StringBuilder directoryPath = new StringBuilder(pathParts[0]);
         for (int i = 1; i < pathParts.length -1; i++) {
-            log.info("->" + directoryPath);
-            directoryPath += File.separator + pathParts[i];
+            directoryPath.append(File.separator).append(pathParts[i]);
         }
-        log.info("Directory path of file: {}", directoryPath);
+        log.info("Directory path of file: {}", directoryPath.toString());
 
-        File theDir = new File(directoryPath);
+        File theDir = new File(directoryPath.toString());
         if (!theDir.exists()) {
             log.info("creating directory: " + theDir.getName());
 
@@ -153,7 +151,7 @@ public class SQLiteService {
             catch(SecurityException se){
                 //handle it
             }
-            log.info("Directory {} was created", directoryPath);
+            log.info("Directory {} was created", directoryPath.toString());
         }
     }
 

@@ -113,28 +113,14 @@ public class UserServiceImpl implements UserService {
 
     private void checkKeyFile(String keyPath){
         java.io.File keyfile = new java.io.File(keyPath);
-        if (!keyfile.exists() || !keyfile.isFile()){
-            throw new RuntimeException("Key path is not correct");
+        if (keyfile.exists()){
+            throw new RuntimeException("File with current key path does exist");
         } else {
-            String line = null;
-            BufferedReader br = null;
+            sqLiteService.checkFilePathForDecrypt(keyPath);
             try {
-                br = new BufferedReader(new InputStreamReader(
-                        new FileInputStream(keyfile), "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            while (true){
-                try {
-                    if (!((line = br.readLine()) != null)) break;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if(!line.isEmpty()){
-                    throw new RuntimeException("Key file is not empty");
-                }
+                keyfile.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
             }
         }
     }

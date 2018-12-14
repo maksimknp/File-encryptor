@@ -76,7 +76,7 @@ void CipherBlockEncryptor::DecryptFile(const char* fileName) const
     workBuf[0] = encryptor.Decrypt(workBuf[0]) ^ xorVector[0];
     workBuf[1] = encryptor.Decrypt(workBuf[1]) ^ xorVector[1];
     
-    file.write(buffer + 1, fileSize - buffer[0] - 2);
+    file.write(buffer + 1, fileSize - buffer[0] - 1);
     file.close();
 
     delete[] buffer;
