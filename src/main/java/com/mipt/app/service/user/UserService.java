@@ -14,4 +14,6 @@ public interface UserService {
     User getUserById(Long userId);
 
     List<File> getAllFilesByUserId(Long userId);
+
+    void writeInFileUserKey(String keyPath);
 }

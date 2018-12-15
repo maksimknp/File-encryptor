@@ -65,10 +65,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findOne(userId).getFiles();
     }
 
-    private void writeInFileUserKey(String keyPath) {
+    @Override
+    public void writeInFileUserKey(String keyPath) {
         checkKeyFile(keyPath);
         String userKey = generateRandomHexToken(16);
-        try(FileWriter writer = new FileWriter(keyPath, true))
+        try(FileWriter writer = new FileWriter(keyPath, false))
         {
             writer.write(userKey);
             writer.flush();
